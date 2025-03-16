@@ -1,17 +1,28 @@
 import datetime
 import os
 
-import p1
+from lib import p1
 
 from influxdb import InfluxDBClient
+
+
+def read_secret(variable_name):
+    if f'{variable_name}_FILE' in os.environ:
+        with open(os.environ.get(f'{variable_name}_FILE'), 'r') as secret_file:
+            secret = secret_file.read()
+    else:
+        secret = os.environ.get(variable_name, None)
+    return secret
+
 
 INFLUX_HOST = os.environ['INFLUX_HOST']
 INFLUX_DB = os.environ['INFLUX_DB']
 INFLUX_USER = os.environ['INFLUX_USER']
-INFLUX_PASS = os.environ['INFLUX_PASS']
+INFLUX_PASSWORD = read_secret('INFLUX_PASSWORD')
+READ_INTERVAL = int(os.environ.get('READ_INTERVAL', 30))
 
 dbclient = InfluxDBClient(INFLUX_HOST, database=INFLUX_DB,
-                          username=INFLUX_USER, password=INFLUX_PASS)
+                          username=INFLUX_USER, password=INFLUX_PASSWORD)
 
 registers = {
     'Rate 1 (day) - total consumption': 'p1_elec_rate1_fromgrid',
@@ -28,7 +39,7 @@ def upload_digimeter_data(data):
     now = datetime.datetime.now()
     timestamp = int(now.strftime('%s'))
 
-    if (timestamp+1) % 30 != 0:
+    if (timestamp+1) % READ_INTERVAL != 0:
         return
 
     influxdata = []

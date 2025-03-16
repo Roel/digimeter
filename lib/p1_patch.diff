@@ -1,0 +1,72 @@
+--- p1_orig.py	2025-03-16 17:26:52.104360079 +0100
++++ p1.py	2025-03-16 17:24:14.048726179 +0100
+@@ -10,10 +10,14 @@ import serial
+ import sys
+ import crcmod.predefined
+ import re
+-from tabulate import tabulate
++import time
++import traceback
++import os
++
++SERIAL_PORT = os.environ['SERIAL_PORT']
+ 
+ # Change your serial port here:
+-serialport = '/dev/ttyUSB0'
++serialport = SERIAL_PORT
+ 
+ # Enable debug if needed:
+ debug = False
+@@ -44,7 +48,8 @@ obiscodes = {
+     "1-0:31.7.0": "L1 current",
+     "1-0:51.7.0": "L2 current",
+     "1-0:71.7.0": "L3 current",
+-    "0-1:24.2.3": "Gas consumption"
++    "0-1:24.2.3": "Gas consumption",
++    "0-2:24.2.1": "Water consumption"
+     }
+ 
+ 
+@@ -109,11 +114,14 @@ def parsetelegramline(p1line):
+         return ()
+ 
+ 
+-def main():
++def main(callback):
+     ser = serial.Serial(serialport, 115200, xonxoff=1)
++
+     p1telegram = bytearray()
+     while True:
+         try:
++            # if not ser.isOpen():
++            #     ser.open()
+             # read input from serial port
+             p1line = ser.readline()
+             if debug:
+@@ -124,7 +132,7 @@ def main():
+                 if debug:
+                     print ("Found beginning of P1 telegram")
+                 p1telegram = bytearray()
+-                print('*' * 60 + "\n")
++                # print('*' * 60 + "\n")
+             # add line to complete telegram
+             p1telegram.extend(p1line)
+             # P1 telegram ends with ! + CRC16 checksum
+@@ -143,9 +151,7 @@ def main():
+                             output.append(r)
+                             if debug:
+                                 print(f"desc:{r[0]}, val:{r[1]}, u:{r[2]}")
+-                    print(tabulate(output,
+-                                   headers=['Description', 'Value', 'Unit'],
+-                                   tablefmt='github'))
++                    callback(output)
+         except KeyboardInterrupt:
+             print("Stopping...")
+             ser.close()
+@@ -158,6 +164,3 @@ def main():
+             ser.close()
+         # flush the buffer
+         ser.flush()
+-
+-if __name__ == '__main__':
+-    main()

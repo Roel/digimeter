@@ -39,6 +39,8 @@ def upload_digimeter_data(data):
     now = datetime.datetime.now()
     timestamp = int(now.strftime('%s'))
 
+    print(f'{now} Checking to read data if matches {READ_INTERVAL}')
+
     if (timestamp+1) % READ_INTERVAL != 0:
         return
 

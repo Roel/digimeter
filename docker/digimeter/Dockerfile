@@ -38,7 +38,8 @@ RUN adduser \
     --home "/appuser" \
     --shell "/sbin/nologin" \
     --uid "${UID}" \
-    appuser
+    appuser \
+    && usermod -aG dialout appuser
 
 # Update pip
 RUN pip install --upgrade pip

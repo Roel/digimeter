@@ -16,13 +16,13 @@ def read_secret(variable_name):
 
 
 INFLUX_HOST = os.environ['INFLUX_HOST']
-INFLUX_DB = os.environ['INFLUX_DB']
-INFLUX_USER = os.environ['INFLUX_USER']
+INFLUX_DATABASE = os.environ['INFLUX_DATABASE']
+INFLUX_USERNAME = os.environ['INFLUX_USERNAME']
 INFLUX_PASSWORD = read_secret('INFLUX_PASSWORD')
 READ_INTERVAL = int(os.environ.get('READ_INTERVAL', 30))
 
-dbclient = InfluxDBClient(INFLUX_HOST, database=INFLUX_DB,
-                          username=INFLUX_USER, password=INFLUX_PASSWORD)
+dbclient = InfluxDBClient(INFLUX_HOST, database=INFLUX_DATABASE,
+                          username=INFLUX_USERNAME, password=INFLUX_PASSWORD)
 
 registers = {
     'Rate 1 (day) - total consumption': 'p1_elec_rate1_fromgrid',

@@ -53,6 +53,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     python -m pip install -r requirements.txt
 
 # Copy the source code into the container.
+COPY --from=build /app/lib/__init__.py lib/__init__.py
 COPY --from=build /app/lib/p1.py lib/p1.py
 COPY --from=build /app/read_data.py .
 

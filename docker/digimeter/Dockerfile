@@ -18,8 +18,7 @@ WORKDIR /app
 # Copy the source code into the container.
 COPY . .
 
-RUN python install.py \
-    && sed -i 's/debug = False/debug = True/' lib/p1.py
+RUN python install.py
 
 FROM python:3.12-slim AS base
 

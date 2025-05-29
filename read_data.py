@@ -39,12 +39,8 @@ def upload_digimeter_data(data):
     now = datetime.datetime.now()
     timestamp = int(now.strftime('%s'))
 
-    print(f'{now} Checking to read data if matches {READ_INTERVAL}')
-
     if (timestamp+1) % READ_INTERVAL != 0:
         return
-
-    print(f'{now} Reading P1 data ...')
 
     influxdata = []
     # influxdata_24h = []
@@ -106,12 +102,10 @@ def upload_digimeter_data(data):
                     influxdata.append(ms)
 
     if len(influxdata) > 0:
-        print(f'{now} Saving P1 data to influx: {influxdata}')
         dbclient.write_points(influxdata)
 
 
 def get_digimeter_data():
-    print(f'Attaching callback to P1')
     p1.main(upload_digimeter_data)
 
 

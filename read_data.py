@@ -111,6 +111,7 @@ def upload_digimeter_data(data):
 
 
 def get_digimeter_data():
+    print(f'Attaching callback to P1')
     p1.main(upload_digimeter_data)
 
 

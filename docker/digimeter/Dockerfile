@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS build
+FROM python:3.14-slim AS build
 
 # Prevents Python from writing pyc files
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -20,7 +20,7 @@ COPY . .
 
 RUN python install.py
 
-FROM python:3.12-slim AS base
+FROM python:3.14-slim AS base
 
 # Prevents Python from writing pyc files
 ENV PYTHONDONTWRITEBYTECODE=1

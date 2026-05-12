@@ -4,15 +4,15 @@
 #
 #    pip-compile --cert=None --client-cert=None --index-url=None --pip-args=None requirements-dev.in
 #
-certifi==2026.1.4
+certifi==2026.4.22
     # via requests
-charset-normalizer==3.4.4
+charset-normalizer==3.4.7
     # via requests
-idna==3.11
+idna==3.14
     # via requests
-patch-ng==1.19.0
+patch-ng==1.19.1
     # via -r requirements-dev.in
-requests==2.32.5
+requests==2.34.0
     # via -r requirements-dev.in
-urllib3==2.6.3
+urllib3==2.7.0
     # via requests
